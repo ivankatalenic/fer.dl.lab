@@ -21,24 +21,24 @@ def _freq_test():
 	top10 = {w: freq[w] for w in words_sorted[:10]}
 	print(f'{top10=}')
 
-def get_embedding_matrix(vocab: Vocab, repr_file: str, device: str = 'cpu') -> torch.nn.Embedding:
+def get_embedding_matrix(vocab: Vocab, repr_file: str) -> torch.nn.Embedding:
 	word_repr = {}
 	with open(repr_file) as f:
 		for line in f:
 			line = line.strip()
 			tokens = line.split(' ')
 			word = tokens[0]
-			vector = torch.empty((300,), dtype=torch.float, device=device)
+			vector = torch.empty((300,), dtype=torch.float)
 			for i, elem in enumerate(tokens[1:]):
 				vector[i] = float(elem)
 			word_repr[word] = vector
-	embed = torch.randn((len(vocab.stoi), 300), dtype=torch.float, device=device)
+	embed = torch.randn((len(vocab.stoi), 300), dtype=torch.float)
 	for word, index in vocab.stoi.items():
 		if word not in word_repr:
 			continue
 		vector = word_repr[word]
 		embed[index] = vector
-	embed[0] = torch.zeros((300,), dtype=torch.float, device=device)
+	embed[0] = torch.zeros((300,), dtype=torch.float)
 	return torch.nn.Embedding.from_pretrained(embed)
 
 if __name__ == '__main__':

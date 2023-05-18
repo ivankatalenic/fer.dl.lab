@@ -6,8 +6,8 @@ class Vocab:
 
 	Has methods for converting words to indices within a vocabulary.
 	"""
-	def __init__(self, freq, max_size=-1, min_freq=0):
-		self.stoi = {'<PAD>': 0, '<UNK>': 1}
+	def __init__(self, freq: dict[str, int], max_size: int = -1, min_freq: int = 0):
+		self.stoi: dict[str, int] = {'<PAD>': 0, '<UNK>': 1}
 		words_sorted = sorted(list(freq), key=lambda w: freq[w], reverse=True)
 		next_index = 2
 		for w in words_sorted:
@@ -15,7 +15,7 @@ class Vocab:
 				break
 			self.stoi[w] = next_index
 			next_index += 1
-	def encode(self, words) -> torch.Tensor:
+	def encode(self, words: list[str]) -> torch.Tensor:
 		ret = torch.empty((len(words), ), dtype=torch.int)
 		for i, word in enumerate(words):
 			if word not in self.stoi:

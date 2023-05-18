@@ -7,16 +7,16 @@ class NLPDataset(torch.utils.data.Dataset):
 
 	def __init__(self, filepath: str, vocab: Vocab = None):
 		self.load_instances(filepath)
-		self.vocab = Vocab
+		self.vocab: Vocab = Vocab
 
-	def load_instances(self, filepath):
-		self.instances = []
+	def load_instances(self, filepath: str):
+		self.instances: list[DataInstance] = []
 		with open(filepath) as f:
 			for line in f:
-				tokens = line.strip().split(', ')
+				tokens: list[str] = line.strip().split(', ')
 				self.instances.append(DataInstance(tokens[0].split(' '), tokens[1]))
 	
-	def __getitem__(self, key):
+	def __getitem__(self, key: int):
 		instance = self.instances[key]
 		label_idx = 0 if instance.label == 'positive' else 1
 		return self.vocab.encode(instance.text), torch.tensor(label_idx, dtype=torch.int)
@@ -24,7 +24,7 @@ class NLPDataset(torch.utils.data.Dataset):
 	def __len__(self):
 		return len(self.instances)
 	
-def pad_collate_fn(batch):
+def pad_collate_fn(batch: list[tuple[torch.Tensor, torch.Tensor]]):
 	texts, labels = zip(*batch)
 	lengths = torch.tensor([len(text) for text in texts])
 	texts = torch.nn.utils.rnn.pad_sequence(texts, True, 0)

@@ -3,5 +3,5 @@ from dataclasses import dataclass
 @dataclass
 class DataInstance:
 	"""Class for keeping track of a labeled training sample"""
-	text: str
+	text: list[str]
 	label: str
