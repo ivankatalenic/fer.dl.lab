@@ -77,8 +77,8 @@ def eval_perf_binary(Y, Y_):
 	TN = np.sum((1 - Y)[Y_ == 0])
 	FN = np.sum((1 - Y)[Y_ == 1])
 	accuracy = (TP + TN) / (TP + FP + TN + FN)
-	precision = TP / (TP + FP)
-	recall = TP / (TP + FN)
+	precision = TP / (TP + FP) if (TP + FP) > 0 else 0
+	recall = TP / (TP + FN) if (TP + FN) > 0 else 0
 	f1 = (2 * TP) / (2 * TP + FP + FN)
 	C = np.max(Y_) + 1
 	confusion = np.zeros((C, C))

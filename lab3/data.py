@@ -23,7 +23,7 @@ def _freq_test():
 
 def get_embedding_matrix(vocab: Vocab, repr_file: str) -> torch.nn.Embedding:
 	word_repr = {}
-	with open(repr_file) as f:
+	with open(repr_file, buffering=2**30) as f:
 		for line in f:
 			line = line.strip()
 			tokens = line.split(' ')
@@ -56,3 +56,10 @@ if __name__ == '__main__':
 	embed = get_embedding_matrix(vocab, 'data/sst_glove_6b_300d.txt')
 	print(embed(torch.tensor(0)))
 	print(embed(torch.tensor(1)))
+
+
+def pad_collate_fn(batch: list[tuple[torch.Tensor, torch.Tensor]]):
+	texts, labels = zip(*batch)
+	lengths = torch.tensor([len(text) for text in texts])
+	texts = torch.nn.utils.rnn.pad_sequence(texts, True, 0)
+	return texts, torch.tensor(labels, dtype=torch.float).reshape((-1, 1)), lengths

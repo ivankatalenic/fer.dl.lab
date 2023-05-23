@@ -30,13 +30,13 @@ def load_dataset(
 		max_vocab_size: int = -1,
 		min_vocab_freq: int = 0,
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.nn.Embedding]:
-	from nlp_dataset import NLPDataset, pad_collate_fn
+	from nlp_dataset import NLPDataset
 
 	train_dataset = NLPDataset('data/sst_train_raw.csv')
 	valid_dataset = NLPDataset('data/sst_valid_raw.csv')
 	test_dataset = NLPDataset('data/sst_test_raw.csv')
 
-	from data import get_frequencies_text, get_embedding_matrix
+	from data import get_frequencies_text, get_embedding_matrix, pad_collate_fn
 	freq = get_frequencies_text(train_dataset.instances)
 
 	from vocab import Vocab

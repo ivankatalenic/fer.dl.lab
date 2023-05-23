@@ -16,6 +16,7 @@ class Vocab:
 			self.stoi[w] = next_index
 			next_index += 1
 	def encode(self, words: list[str]) -> torch.Tensor:
+		"""Returns an array of indices for words in the input list."""
 		ret = torch.empty((len(words), ), dtype=torch.int)
 		for i, word in enumerate(words):
 			if word not in self.stoi:
